@@ -23,13 +23,13 @@ oF 0.9~
 string ofxFunctionalEasing(EasingFunction easing,
                            float duration,
                            const string &label = "",
-                           EasingCallback callback = defaultCallback)
+                           EasingCallback callback = defaultCallback);
 
 string ofxFunctionalEasing(EasingFunction easing,
                            float duration,
                            float delay,
                            const string &label = "",
-                           EasingCallback callback = defaultCallback)
+                           EasingCallback callback = defaultCallback);
 ```
 
 #### Group of easings
@@ -38,24 +38,24 @@ string ofxFunctionalEasing(EasingFunction easing,
 string ofxFunctionalEasing(vector<EasingFunction> easings,
                            float duration,
                            const string &label = "",
-                           EasingCallback callback = defaultCallback)
+                           EasingCallback callback = defaultCallback);
 
 string ofxFunctionalEasing(vector<EasingFunction> easings,
                            float duration,
                            float delay,
                            const string &label = "",
-                           EasingCallback callback = defaultCallback)
+                           EasingCallback callback = defaultCallback);
                            
 string ofxFunctionalEasing(initializer_list<EasingFunction> easings,
                            float duration,
                            const string &label = "",
-                           EasingCallback callback = defaultCallback)
+                           EasingCallback callback = defaultCallback);
 
 string ofxFunctionalEasing(initializer_list<EasingFunction> easings,
                            float duration,
                            float delay,
                            const string &label = "",
-                           EasingCallback callback = defaultCallback)
+                           EasingCallback callback = defaultCallback);
 ```
 
 * easing(s) : easing function(s). parameter is normalized to [0.0, 1.0]. (i.e. elapsed time / duration)
