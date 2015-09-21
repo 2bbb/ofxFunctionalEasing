@@ -8,9 +8,15 @@
 #pragma once
 
 #include "ofMain.h"
-#include <functional>
-#include <memory>
+#include <initializer_list>
+#include <vector>
 #include <unordered_map>
+#include <memory>
+#include <functional>
+
+#include "ofxFunctionalEasingFunctions.h"
+
+using EasingFunction = std::function<void(float progress)>;
 
 namespace ofxFunctional {
     class Easing {
@@ -42,17 +48,33 @@ namespace ofxFunctional {
             }
         };
         
-        std::function<void(float perc)> easing;
+        vector<EasingFunction> easings;
         float duration, delay;
         std::string label;
         std::function<void(const std::string &)> callback;
         float startTime, endTime;
-        Easing(std::function<void(float progress)> easing,
+        
+        Easing(std::vector<EasingFunction> easings,
                float duration,
                float delay,
                const std::string &label,
                const std::function<void(const std::string &)> &callback)
-        : easing(easing)
+        : duration(duration)
+        , delay(delay)
+        , callback(callback)
+        , label(label)
+        {
+            this->easings.swap(easings);
+            startTime = delay + ofGetElapsedTimef();
+            endTime = startTime + duration;
+        }
+        
+        Easing(std::initializer_list<EasingFunction> easings,
+               float duration,
+               float delay,
+               const std::string &label,
+               const std::function<void(const std::string &)> &callback)
+        : easings(easings)
         , duration(duration)
         , delay(delay)
         , callback(callback)
@@ -61,21 +83,20 @@ namespace ofxFunctional {
             startTime = delay + ofGetElapsedTimef();
             endTime = startTime + duration;
         }
-        
     public:
-        static void factory(std::function<void(float)> easing,
+        static void factory(std::vector<EasingFunction> easings,
                             float duration,
                             float delay,
                             const std::string &label,
                             const std::function<void(const std::string &)> &callback)
         {
-            Manager::getManager()->add(std::shared_ptr<Easing>(new Easing(easing, duration, delay, label, callback)), label);
+            Manager::getManager()->add(std::shared_ptr<Easing>(new Easing(easings, duration, delay, label, callback)), label);
         }
-
+        
         bool update(float time) {
             if(time < startTime) return false;
             float progress = ofMap(time, startTime, endTime, 0.0f, 1.0f, true);
-            easing(progress);
+            for(auto &easing : easings) easing(progress);
             return 1.0f <= progress;
         }
         
@@ -85,7 +106,7 @@ namespace ofxFunctional {
     };
 };
 
-std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
+std::string ofxFunctionalEasing(std::vector<EasingFunction> easings,
                                 float duration,
                                 float delay,
                                 const std::string &label = "",
@@ -93,18 +114,59 @@ std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
 {
     if(label == "") {
         string new_label = std::string("ofe::") + ofToString(ofGetUnixTime()) + "_" + ofToString(ofRandom(0.0f, 1.0f));
-        ofxFunctional::Easing::factory(easing, duration, delay, new_label, callback);
+        ofxFunctional::Easing::factory(easings, duration, delay, new_label, callback);
         return new_label;
     } else {
-        ofxFunctional::Easing::factory(easing, duration, delay, label, callback);
+        ofxFunctional::Easing::factory(easings, duration, delay, label, callback);
         return label;
     }
 }
 
-inline std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
+inline std::string ofxFunctionalEasing(std::vector<EasingFunction> easings,
                                        float duration,
                                        const std::string &label = "",
                                        const std::function<void(const std::string &)> &callback = [](const std::string &){})
 {
-    ofxFunctionalEasing(easing, duration, 0.0f, label, callback);
+    return ofxFunctionalEasing(easings, duration, 0.0f, label, callback);
+}
+
+std::string ofxFunctionalEasing(std::initializer_list<EasingFunction> easings,
+                                float duration,
+                                float delay,
+                                const std::string &label = "",
+                                const std::function<void(const std::string &)> &callback = [](const std::string &){})
+{
+    if(label == "") {
+        string new_label = std::string("ofe::") + ofToString(ofGetUnixTime()) + "_" + ofToString(ofRandom(0.0f, 1.0f));
+        ofxFunctional::Easing::factory(easings, duration, delay, new_label, callback);
+        return new_label;
+    } else {
+        ofxFunctional::Easing::factory(easings, duration, delay, label, callback);
+        return label;
+    }
+}
+
+inline std::string ofxFunctionalEasing(std::initializer_list<EasingFunction> easings,
+                                       float duration,
+                                       const std::string &label = "",
+                                       const std::function<void(const std::string &)> &callback = [](const std::string &){})
+{
+    return ofxFunctionalEasing(easings, duration, 0.0f, label, callback);
+}
+
+inline std::string ofxFunctionalEasing(EasingFunction easing,
+                                       float duration,
+                                       float delay,
+                                       const std::string &label = "",
+                                       const std::function<void(const std::string &)> &callback = [](const std::string &){})
+{
+    return ofxFunctionalEasing({easing}, duration, delay, label, callback);
+}
+
+inline std::string ofxFunctionalEasing(EasingFunction easing,
+                                       float duration,
+                                       const std::string &label = "",
+                                       const std::function<void(const std::string &)> &callback = [](const std::string &){})
+{
+    return ofxFunctionalEasing({easing}, duration, 0.0f, label, callback);
 }
