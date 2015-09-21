@@ -26,7 +26,6 @@ public:
     
     void draw() {
         ofBackground(0, 0, 0);
-        ofSetColor(255, 255, 255);
         for(auto circle : circles) {
             circle->draw();
         }
@@ -34,19 +33,29 @@ public:
     
     void keyPressed(int key) {
         if(key == ' ') {
-            for(int i = 0; i < 10; i++) {
-                float from = ofRandom(10, 40), to = ofRandom(30, 80);
+            for(int i = 0; i < 100; i++) {
+                float from = ofRandom(5, 20), to = from + ofRandom(10, 30);
                 shared_ptr<Circle> c = shared_ptr<Circle>(new Circle(from, ofRandomWidth(), ofRandomHeight()));
                 
                 circles.push_back(c);
                 auto &circle = circles.back();
-                ofxFunctionalEasing([=](float progress) {
-                    circle->radius = ofLerp(from, to, progress);
-                    circle->alpha = ofLerp(255, 0, progress);
-                }, ofRandom(0.5f, 0.8f), ofRandom(0.0f, 0.3f), ofToString(generatedNum++), [&,circle](std::string label) {
+                vector<EasingFunction> eases;
+                
+                if(ofRandom(1) < 0.8f) {
+                    eases.push_back([=](float progress) {
+                        circle->radius = ofLerp(from, to, progress * progress);
+                        circle->alpha = ofLerp(255, 0, progress);
+                    });
+                } else {
+                    circle->alpha = 255;
+                    eases.push_back(BindEase(ofxFunctional::OutQuad, circle->radius, circle->radius, 100.0f));
+                    eases.push_back(BindEase(ofxFunctional::OutQubic, circle->alpha, 255, 0));
+                }
+                
+                ofxFunctionalEasing(eases, ofRandom(0.5f, 0.8f), ofRandom(0.0f, 0.3f), ofToString(generatedNum++), [&,circle](std::string label) {
                     ofRemove(circles, [=](shared_ptr<Circle> &x) { return x == circle; });
                 });
-            } 
+            }
         }
     }
 };

@@ -42,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		95924F3D1BAF9BFA0069D6F5 /* ofxFunctionalEasing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxFunctionalEasing.h; sourceTree = "<group>"; };
+		95924F441BAFCC4D0069D6F5 /* ofxFunctionalEasingFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxFunctionalEasingFunctions.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E4B69B5B0A3A1756003C02F2 /* ofxFunctionalEasingExampleDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ofxFunctionalEasingExampleDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
@@ -75,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				95924F3D1BAF9BFA0069D6F5 /* ofxFunctionalEasing.h */,
+				95924F441BAFCC4D0069D6F5 /* ofxFunctionalEasingFunctions.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
