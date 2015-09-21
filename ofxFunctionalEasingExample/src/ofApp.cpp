@@ -48,8 +48,8 @@ public:
                     });
                 } else {
                     circle->alpha = 255;
-                    eases.push_back(BindEase(ofxFunctional::OutQuad, circle->radius, circle->radius, 100.0f));
-                    eases.push_back(BindEase(ofxFunctional::OutQubic, circle->alpha, 255, 0));
+                    eases.push_back(EasingFromTemplate(ofxFunctional::OutQuad, circle->radius, circle->radius, 100.0f));
+                    eases.push_back(EasingFromTemplate(ofxFunctional::OutQubic, circle->alpha, 255, 0));
                 }
                 
                 ofxFunctionalEasing(eases, ofRandom(0.5f, 0.8f), ofRandom(0.0f, 0.3f), ofToString(generatedNum++), [&,circle](std::string label) {

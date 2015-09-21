@@ -7,6 +7,8 @@
 
 #pragma once
 
+using EasingFunction = std::function<void(float progress)>;
+
 namespace ofxFunctional {
     using TemplateFunction = float(*)(float progress, float start_value, float end_value);
 #   define DefEase(name, body) inline float name(float p, float s, float e) { return body; }
@@ -26,7 +28,7 @@ namespace ofxFunctional {
 #include <type_traits>
 
 template <typename T, typename std::enable_if<is_arithmetic<T>::value>::type *_=nullptr>
-std::function<void(float)> BindEase(ofxFunctional::TemplateFunction f, T &binded_value, T start_value, T end_value) {
+EasingFunction EasingFromTemplate(ofxFunctional::TemplateFunction f, T &binded_value, T start_value, T end_value) {
     return [=,&binded_value](float progress) {
         binded_value = f(progress, start_value, end_value);
     };
