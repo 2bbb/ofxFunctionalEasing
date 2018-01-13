@@ -85,7 +85,7 @@ namespace ofxFunctional {
     };
 };
 
-std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
+static std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
                                 float duration,
                                 float delay,
                                 const std::string &label = "",
@@ -101,7 +101,7 @@ std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
     }
 }
 
-inline std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
+inline static std::string ofxFunctionalEasing(std::function<void(float progress)> easing,
                                        float duration,
                                        const std::string &label = "",
                                        const std::function<void(const std::string &)> &callback = [](const std::string &){})
